@@ -41,20 +41,37 @@ prompt ──► resolvePrompt (slash commands, stacking, arguments)
 
 The main agent and subagents share one `runAgent` function. A subagent is the same loop over a fresh message list, with no `Skill` tool, so forks can't recurse.
 
-## Usage
+## Quick start
 
-Requires Node.js 18+ and an [OpenRouter](https://openrouter.ai) API key.
+Requires Node.js 20.6+ and an [OpenRouter](https://openrouter.ai) API key.
 
 ```bash
 npm install
-export OPENROUTER_API_KEY=sk-or-...
-
-node app/main.js -p "Read README.md and summarize it"
-node app/main.js -p "List the project files and delete the old readme"
-node app/main.js -p "/deploy staging eu-west"
 ```
 
+Create a `.env` file in the project root:
+
+```dotenv
+OPENROUTER_API_KEY=sk-or-v1-...
+MAX_TOKENS=4096        # optional, caps output per request
+```
+
+Run it:
+
+```bash
+node --env-file=.env app/main.js -p "Say hello in one word"
+node --env-file=.env app/main.js -p "Read README.md and summarize it"
+node --env-file=.env app/main.js -p "/deploy staging eu-west"
+```
+
+The agent works in the directory it's launched from and can create and delete files there, so try it in a sandbox folder. The [testing guide](docs/TESTING.md) shows how.
+
 Debug output (tool calls, skill loading, subagent activity) goes to stderr. Only the final answer goes to stdout, so the output can be piped.
+
+## Documentation
+
+- **[Testing guide](docs/TESTING.md)**: step-by-step setup and 13 manual tests covering every feature, with expected output and troubleshooting
+- **[Code walkthrough](docs/CODE_WALKTHROUGH.md)**: how the agent loop, tools, skills and subagents are implemented, and why
 
 ## Example skill
 
